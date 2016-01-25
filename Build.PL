@@ -21,7 +21,7 @@ my $builder = Module::Build->new(
 							 'IO::Socket::INET'            => '1.31',
 							 'Readonly'                    => '1.03',
 							 'strict'                      => '1.03',
-							 'warnings'                    => '1.05_01',
+							 'warnings'                    => '1.34',
 							},
 				 recommends          => {
 							},
@@ -31,7 +31,7 @@ my $builder = Module::Build->new(
 							 'Test::Perl::Critic'      => '1.01',
 							 'Test::Trap'              => '0',
 							 'Time::HiRes'             => '1.9719',
-							 'File::Path'              => '2.07_03',
+							 'File::Path'              => '2.09',
 							},
 				 build_recommends    => {
 							},

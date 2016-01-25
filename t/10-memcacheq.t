@@ -1,3 +1,11 @@
+# -*- mode: cperl; tab-width: 8; indent-tabs-mode: nil; basic-offset: 2 -*-
+# vim:ts=8:sw=2:et:sta:sts=2
+#########
+# Author:        rmp
+# Last Modified: $Date$
+# Id:            $Id$
+# $HeadURL$
+#
 use strict;
 use warnings;
 use Test::More;
@@ -8,12 +16,18 @@ use t::sock qw(setup teardown);
 
 our $PKG = 'Net::MemcacheQ';
 
+my $version;
+
 eval {
-  qx(memcacheq -h) or croak $ERRNO;
+  $version = qx(memcacheq -h | head -1) or croak $ERRNO;
 } or do {
   plan skip_all => 'memcacheq not found';
   exit;
 };
+
+if($version !~ /0[.]2/smix) {
+  plan skip_all => 'memcacheq version untested';
+}
 
 plan tests => 14;
 
@@ -58,8 +72,9 @@ can_ok($PKG, qw(new queues delete_queue push shift));
   my $nmq = Net::MemcacheQ->new({
 				 port => setup,
 				});
+
   $nmq->push('myqueue', 'my message');
-  is_deeply($nmq->queues, [qw(myqueue)]);
+  is_deeply($nmq->queues, ['myqueue 1/0']); # was ['myqueue']
 
   teardown();
 }
@@ -94,6 +109,7 @@ can_ok($PKG, qw(new queues delete_queue push shift));
 }
 
 {
+  no warnings qw(once);
   local $Net::MemcacheQ::DEBUG = 1;
   my $nmq = Net::MemcacheQ->new({
 				 port => setup,
